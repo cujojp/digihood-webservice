@@ -50,8 +50,8 @@ router.post('/api/update-beacon/', function(req, res) {
           console.log(responseData);
         }
       });
+      res.send({ msg: 'Succesfull message.' });
     }
-    res.send({ msg: 'Succesfull message.' });
   });   
 });
 
