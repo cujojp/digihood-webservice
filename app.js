@@ -19,9 +19,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(livereload({
-  port: livereloadport
-}));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
@@ -71,9 +68,4 @@ app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });  
 
-//Set up your livereload server
-lrserver.listen(livereloadport);
-
 module.exports = app;
-
-console.log('Started express web server on port ' + port);
