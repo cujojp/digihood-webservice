@@ -4,6 +4,11 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var TwilioClient = require('twilio');
+var config = require('./_config');
+var client = TwilioClient(
+      process.env.TWILIO_SID || config.twilio.sid, 
+      process.env.TWILIO_TOKEN || config.twilio.auth_token);
 
 var routes = require('./routes/index');
 
