@@ -26,6 +26,7 @@
     "morgan": "~1.0.0",
     "node-sass": "~0.8.4",
     "static-favicon": "~1.0.2",
+    "twilio": "^1.7.0",
     "underscore": "^1.7.0"
   },
   "devDependencies": {

@@ -2,6 +2,27 @@ var express = require('express');
 var router = express.Router();
 var Firebase = require('firebase');
 var _ = require('underscore');
+var config = require('../_config');
+var TwilioClient = require('twilio');
+var client = TwilioClient(config.twilio.sid, config.twilio.auth_token);
+var beacons = {};
+var currBeacon = null;
+
+var fireBaseRef = new Firebase("https://digihood.firebaseio.com/beacons/")
+    .once('value', function(snap) { 
+    beacons = snap.val();
+});
+
+var findById = function(id, cb) {
+  _.find(beacons, function(beacon) {
+    if (id === beacon.id) {
+      return cb(beacon);
+    }
+  });
+
+  cb(currBeacon);
+};
+
 
 /* GET Home page. */
 router.get('/', function(req, res) {
@@ -12,7 +33,8 @@ router.get('/', function(req, res) {
 /**
  * Will run from a form submision and submit new data.
  */
-router.post('/api/add-beacon/', function(req, res) {
+router.post('/api/update-beacon/:id', function(req, res) {
+  console.log('gimme some beacons');
   // Set our internal DB variable
 });
 
@@ -29,11 +51,7 @@ router.delete('/api/remove-beacon/:id', function(req, res) {
  * Landing page for locations. Will load all locations in the database.
  */
 router.get('/api/get-beacons/data.json', function(req, res) {
-  var objRef = new Firebase("https://digihood.firebaseio.com/beacons/").once('value', function(snap) {
-    var results = snap.val();
-
-    res.json({ "beacons" : results });
-  }); 
+  res.json({ "beacons" : beacons });
 });
 
 
@@ -45,14 +63,10 @@ router.get('/api/get-beacon/:id/data.json', function(req, res) {
   //var collection = db.collection('locationscollection');
   var locationId = req.params.id;
 
-  var objRef = new Firebase("https://digihood.firebaseio.com/beacons/").once('value', function(snap) {
-    var results = snap.val();
+  findById(locationId, function(data) {
+    console.log(data);
 
-    _.find(results, function(beacon) {
-      if (locationId === beacon.id) {
-        res.json({ "beacon" : beacon });
-      }
-    });
+    res.json({ "beacon" : data });
   });
 
   //collection.findOne({'_id': ObjectID(locationId)},{},function(err, results){

@@ -10,6 +10,8 @@ var embedlr = require('gulp-embedlr');
 var refresh = require('gulp-livereload');
 var lrserver = require('tiny-lr')();
 var livereload = require('connect-livereload');
+var TwilioClient = require('twilio');
+var client = TwilioClient(config.twilio.sid, config.twilio.auth_token);
 var livereloadport = 35729;
 var serverport = 5000;
 
