@@ -41,15 +41,21 @@ router.post('/api/update-beacon/', function(req, res) {
   
   findById(locationId, function(data) {
     if (data) {
+      var objIndex = beacons.indexOf(data)
+      
       client.sendMessage({
         to: phone,
         from: '+14159694041',
-        body: 'Balls'
+        body: data.notifications.description[0].confirmation
       }, function(err, responseData) {
         if (!err) { 
           console.log(responseData);
         }
       });
+
+      beaconInstance = new Firebase('https://digihood.firebaseio.com/beacons/'+objIndex);
+      beaconInstance.update({ reward: false });
+
       res.send({ msg: 'Succesfull message.' });
     }
   });   
