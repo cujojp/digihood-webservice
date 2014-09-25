@@ -6,9 +6,7 @@
     "node": ">=0.10.0",
     "npm": ">=1.3"
   },
-  "scripts": {
-    "start": "node app.js"
-  },
+  "scripts" : "gulp",
   "dependencies": {
     "body-parser": "~1.0.2",
     "cookie-parser": "~1.0.1",
