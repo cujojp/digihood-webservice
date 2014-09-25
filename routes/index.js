@@ -4,7 +4,9 @@ var Firebase = require('firebase');
 var _ = require('underscore');
 var config = require('../_config');
 var TwilioClient = require('twilio');
-var client = TwilioClient(config.twilio.sid, config.twilio.auth_token);
+var client = TwilioClient(
+      process.env.TWILIO_SID || config.twilio.sid, 
+      process.env.TWILIO_TOKEN || config.twilio.auth_token);
 var beacons = {};
 var currBeacon = null;
 
@@ -33,9 +35,24 @@ router.get('/', function(req, res) {
 /**
  * Will run from a form submision and submit new data.
  */
-router.post('/api/update-beacon/:id', function(req, res) {
-  console.log('gimme some beacons');
-  // Set our internal DB variable
+router.post('/api/update-beacon/', function(req, res) {
+  var locationId = req.body.id;
+  var phone = '+1' + req.body.phone;
+  
+  findById(locationId, function(data) {
+    if (data) {
+      client.sendMessage({
+        to: phone,
+        from: '+14159694041',
+        body: 'Balls'
+      }, function(err, responseData) {
+        if (!err) { 
+          console.log(responseData);
+        }
+      });
+    }
+    res.send({ msg: 'Succesfull message.' });
+  });   
 });
 
 
@@ -64,19 +81,8 @@ router.get('/api/get-beacon/:id/data.json', function(req, res) {
   var locationId = req.params.id;
 
   findById(locationId, function(data) {
-    console.log(data);
-
     res.json({ "beacon" : data });
   });
-
-  //collection.findOne({'_id': ObjectID(locationId)},{},function(err, results){
-    //console.log(results);
-    //if (err) {
-      //return res.json({ "error" : err });
-    //} else {
-      //return res.json({ "location" : results });
-    //}
-  //});  
 });
 
 module.exports = router;

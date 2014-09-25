@@ -11,7 +11,11 @@ var refresh = require('gulp-livereload');
 var lrserver = require('tiny-lr')();
 var livereload = require('connect-livereload');
 var TwilioClient = require('twilio');
-var client = TwilioClient(config.twilio.sid, config.twilio.auth_token);
+var client = TwilioClient(
+      process.env.TWILIO_SID || config.twilio.sid, 
+      process.env.TWILIO_TOKEN || config.twilio.auth_token);
+
+console.log(process.env.TWILIO_SID || config.twilio.sid);
 var livereloadport = 35729;
 var serverport = 5000;
 
